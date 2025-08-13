@@ -1,0 +1,116 @@
+/* 1) Load Tailwind */
+@import "tailwindcss";
+
+/* 2) Dark mode via .dark on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 3) Theme tokens + animations (Tailwind v4) */
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Queen's palette + glass */
+  --color-q-blue-50:  #eff6ff;
+  --color-q-blue-100: #dbeafe;
+  --color-q-blue-200: #bfdbfe;
+  --color-q-royal-700:#1d4ed8;
+
+  --color-q-navy-900: #0b1226;
+  --color-q-navy-800: #0f1a36;
+
+  --color-glass:      rgb(255 255 255 / 0.12);
+  --color-glass-dark: rgb(0 0 0 / 0.35);
+
+  --color-border: rgb(229 231 235);
+
+  /* Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-shimmer: shimmer 3s infinite;
+
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
+  @keyframes glow  { 0%{box-shadow:0 0 5px rgba(255 255 255/.5)} 100%{box-shadow:0 0 20px rgba(255 255 255/.8)} }
+  @keyframes slideUp { 0%{transform:translateY(100px);opacity:0} 100%{transform:translateY(0);opacity:1} }
+  @keyframes fadeIn  { 0%{opacity:0} 100%{opacity:1} }
+  @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+}
+
+/* 4) Base layer */
+@layer base {
+  * { @apply border-border; }
+  html { @apply scroll-smooth; }
+
+  body {
+    @apply text-gray-900 dark:text-gray-100;
+    background-image:
+      radial-gradient(1200px 600px at 10% 0%, var(--color-q-blue-100) 0%, transparent 60%),
+      radial-gradient(1200px 600px at 100% 100%, var(--color-q-blue-50) 0%, transparent 60%),
+      linear-gradient(to bottom right, var(--color-q-blue-50), var(--color-q-blue-200));
+  }
+  .dark body, body.dark {
+    background-image:
+      radial-gradient(900px 500px at 0% 0%, rgba(17 24 39 / .35) 0%, transparent 60%),
+      radial-gradient(900px 500px at 100% 100%, rgba(30 41 59 / .35) 0%, transparent 60%),
+      linear-gradient(to bottom right, var(--color-q-navy-900), var(--color-q-navy-800));
+  }
+
+  ::selection { @apply bg-amber-500/30 dark:bg-amber-400/30; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { @apply bg-q-blue-50 dark:bg-q-navy-900; }
+  ::-webkit-scrollbar-thumb { @apply bg-gray-400 dark:bg-gray-600 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-gray-500 dark:bg-gray-500; }
+}
+
+/* 5) Components */
+@layer components {
+  .glass {
+    @apply backdrop-blur-xl border rounded-2xl;
+    background-color: rgb(255 255 255 / 0.55);
+    border-color: rgb(255 255 255 / 0.35);
+  }
+  .dark .glass {
+    background-color: rgb(0 0 0 / 0.35);
+    border-color: rgb(255 255 255 / 0.12);
+  }
+
+  .glass-heavy {
+    @apply backdrop-blur-2xl border rounded-3xl;
+    background-color: rgb(255 255 255 / 0.82);   /* more opaque for light */
+    border-color: rgb(255 255 255 / 0.45);
+  }
+  .dark .glass-heavy {
+    background-color: rgb(0 0 0 / 0.65);         /* more opaque for dark */
+    border-color: rgb(255 255 255 / 0.18);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(90deg, #f59e0b, #ea580c);
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255 255 255 / 0.30), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+  }
+}
+
+/* 6) Extra utilities */
+@utility backdrop-blur-xs { backdrop-filter: blur(2px); }
+@utility glass {
+  background-color: var(--color-glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+@utility glass-heavy {
+  background-color: var(--color-glass-dark);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgb(255 255 255 / 0.18);
+}
+
+/* Small helper for ultra-small screens */
+.xs\:inline { display: none; }
+@media (min-width: 380px) { .xs\:inline { display: inline; } }
