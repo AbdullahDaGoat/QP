@@ -279,9 +279,7 @@ function useActiveSection(ids: string[]) {
 ----------------------------- */
 
 const Hero: React.FC = () => {
-  const [ready, setReady] = useState(false);
-  useEffect(() => setReady(true), []);
-
+  
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-mt-24">
       {/* Banner bg */}
