@@ -1,5 +1,10 @@
 name = "qptest"
 compatibility_date = "2025-08-13"
 
+# Wrangler will run this before deploy in CI
+[build]
+command = "pnpm build"
+
+# Serve your static site from the Vite output dir
 [assets]
 directory = "./dist"
